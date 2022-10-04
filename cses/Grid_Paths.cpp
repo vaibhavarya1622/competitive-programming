@@ -1,35 +1,47 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int dp[7][7];
+// Optimize NEeded
+//  if the path cannot continue forward but can turn either left or right, the grid splits 
+//  into two parts that both contain unvisited squares. It is clear that we cannot visit all squares anymore, so we can terminate the search.
 
-void solve(int x,int y,int i, string s, int& ans) {
-    if(x<0 || y<0 || x>=7 || y>=7 || i>48) return;
-    if(x == 0 && y == 6){
-        if(i == 48) ++ans;
+bool vis[7][7];
+
+string s;
+int ans;
+
+bool safe(int x, int y){
+    return x>=0 && x<7 && y>=0 && y<7 && !vis[x][y];
+}
+void solve(int i,int j,int idx=0) {
+    if(i == 6 && j == 0){
+        if(idx == 48)
+            ++ans;
         return;
     }
-    if(dp[x][y]) return;
-    dp[x][y] = 1;
-
-    if(s[i] == '?' || s[i] == 'L'){
-        solve(x-1,y,i+1,s,ans);
+    vis[i][j] = 1;
+    
+    if(safe(i,j-1) && (s[idx] == '?' || s[idx] == 'L')){
+        if(!(!safe(i,j-2) && (safe(i+1,j-1) && safe(i-1,j-1))))
+            solve(i,j-1,idx+1);
     }
-    if(s[i] == '?' || s[i] == 'R'){
-        solve(x+1,y,i+1,s,ans);
+    if(safe(i,j+1) && (s[idx] == '?' || s[idx] == 'R')){
+        if(!(!safe(i,j+2) && (safe(i+1,j+1) && safe(i-1,j+1))))
+            solve(i,j+1,idx+1);
     }
-    if(s[i] == '?' || s[i] == 'U'){
-        solve(x,y-1,i+1,s,ans);
+    if(safe(i-1,j) && (s[idx] == '?' || s[idx] == 'U')){
+        if(!(!safe(i-2,j) && (safe(i-1,j+1) && safe(i-1,j-1))))
+            solve(i-1,j,idx+1);
     }
-    if(s[i] == '?' || s[i] == 'D'){
-        solve(x,y+1,i+1,s,ans);
+    if(safe(i+1,j) && (s[idx] == '?' || s[idx] == 'D')){
+        if(!(!safe(i+2,j) && (safe(i+1,j-1) && safe(i+1,j+1))))
+        solve(i+1,j,idx+1);
     }
-    dp[x][y] = 0;
+    vis[i][j] = 0;
 }
 int main(){
-    string s;
     cin>>s;
-    int ans=0;
-    solve(0,0,0,s,ans);
+    solve(0,0);
     cout<<ans;
+    return 0;
 }
