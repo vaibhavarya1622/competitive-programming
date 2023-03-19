@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "valarray": "cpp",
+        "random": "cpp",
+        "iostream": "cpp",
+        "array": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
+}
