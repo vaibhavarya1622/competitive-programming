@@ -61,28 +61,23 @@ ll powm(ll a, ll b) {
 const int MAXN = 200005;
 ll dp[MAXN][2];
 vl adj[MAXN];
-bool done[MAXN];
-void dfs(ll u, ll par){
+ll ans;
+
+ll dfs(ll u, ll par){
+    ll h=0,sh=0;
     for(ll v:adj[u]){
         if(v != par){
-            dfs(v,u);
-            dp[u][0] += max(dp[v][0],dp[v][1]);
+            ll t = dfs(v,u);
+            if(t>h){
+                sh = h;
+                h = t;
+            }
+            else if(t>sh)
+                sh = t;
         }
     }
-    for(ll v:adj[u]){
-        if(v != par){
-            dp[u][1] = max(dp[u][1], 1+dp[u][0]-max(dp[v][0],dp[v][1])+dp[v][0]);
-        }
-    }
-}
-ll ans=0;
-void greedy(ll u, ll par){
-    for(ll v:adj[u]){
-        if(par != v){
-            greedy(v,u);
-            if(!done[u] && !done[v]){ done[u] = done[v] = 1;++ans;}
-        }
-    }
+    ans = max(ans,h+sh+1);
+    return h+1;
 }
 void solve(){    
     ll n,u,v;
@@ -92,11 +87,9 @@ void solve(){
         cin>>u>>v;
         adj[u].pb(v);
         adj[v].pb(u);
-    }
-    // dfs(1,0);
-    // cout<<max(dp[1][0],dp[1][1])<<'\n';
-    greedy(1,0);
-    cout<<ans<<'\n';
+    }   
+    dfs(1,0);
+    cout<<ans-1<<'\n'; 
 }
 int main()
 {
