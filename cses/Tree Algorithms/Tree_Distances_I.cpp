@@ -58,26 +58,61 @@ ll powm(ll a, ll b) {
 }
     return res;
 }
-const int MAXN = 20005;
+const int MAXN = 200005;
 vl adj[MAXN];
 ll firstMax[MAXN];
 ll secondMax[MAXN];
+ll child[MAXN];
+ll ans[MAXN];
 
 void dfs(ll u, ll p){
     for(ll v:adj[u]){
         if(v != p){
             dfs(v,u);
-            if(firstMax[v]>)
+            if(firstMax[v]+1>firstMax[u]){
+                child[u] = v;
+                secondMax[u] = firstMax[u];
+                firstMax[u] = firstMax[v]+1;
+            }
+            else if(firstMax[v]+1>secondMax[u]){
+                secondMax[u] = firstMax[v]+1;
+            }
         }
     }
 }
 
+void dfs2(ll u, ll p){
+    for(ll v:adj[u]){
+        if(v == p) continue;
+        if(child[u] == v){
+            if(firstMax[v]<secondMax[u]+1){
+                secondMax[v] = firstMax[v];
+                firstMax[v] = secondMax[u]+1;
+                child[v] = u;
+            }
+            else{
+                secondMax[v] = max(secondMax[v], secondMax[u]+1);
+            }
+        }
+        else{
+            secondMax[v] = firstMax[v];
+            firstMax[v] = firstMax[u]+1;
+            child[v] = u;
+        }
+        dfs2(v,u);
+    }
+}
 void solve(){    
     ll n,u,v;
     cin>>n;
     FOR(i,0,n-1){
         cin>>u>>v;
         adj[u].pb(v),adj[v].pb(u);
+    }
+    dfs(1,0);
+    dfs2(1,0);
+    FOR(i,1,n+1){
+        cout<<firstMax[i]<<' ';
     }
 }
 int main()

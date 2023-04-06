@@ -16,7 +16,7 @@ int main(){
     for(int i=0;i<n;++i){
         cin>>arr[i];
     }
-    ll l = 1ll, r = (ll)1e18;
+    ll l = 1ll, r = (ll)1e9;
     while(l<r){
         ll mid = (l+r)/2ll;
         if(check(arr,n,mid)>=t){

@@ -41,7 +41,7 @@ typedef vector<vi> vvi;
 typedef vector<vl> vvl;
 const int infi=0x3f3f3f3f;
 const ll infl=0x3f3f3f3f3f3f3f3fLL;
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> oset;
+template<class T> using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 auto clk=clock();
 mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
 int rng(int lim) {
@@ -58,94 +58,38 @@ ll powm(ll a, ll b) {
 }
     return res;
 }
+const int MAXN = 2e5+5;
+const int MAXL = 18;//log2(MAXN)
 
-struct Segment{
-    vl t;
-    int n;
-    Segment(vl& nums){
-        int sz = nums.size();
-        this->n = sz;
-        int powOf2 = 1;
-        while(powOf2<=sz){
-            powOf2 <<= 1;
-        }
-        t.assign(2*powOf2+1,1e9+7);
-        build(nums,1,1,n);
-    }
-    void build(vl& a, ll v, ll tl, ll tr){
-        if(tl == tr){
-            t[v] = a[tl-1];
-        }
-        else{
-            ll tm = (tl+tr)/2;
-            build(a,2*v,tl,tm);
-            build(a,2*v+1,tm+1,tr);
-            t[v] = min(t[2*v],t[2*v+1]);
-        }
-    }
-    void update(ll v, ll tl ,ll tr, ll pos, ll new_val){
-        if(tl == tr){
-            t[v] = new_val;
-        }
-        else{
-            ll tm = (tl+tr)/2;
-            if(pos<=tm){
-                update(2*v,tl,tm,pos,new_val);
-            }
-            else{
-                update(2*v+1,tm+1,tr,pos,new_val);
-            }
-            t[v] = min(t[2*v],t[2*v+1]);
-        }
-    }
-    ll qry(ll v, ll tl, ll tr, ll l, ll r){
-        if(l>r) return 1e9+7;
-        if(tl == l && tr == r) return t[v];
+ll up[MAXN][MAXL];
 
-        ll tm = (tl+tr)/2;
-        return min(qry(2*v,tl,tm,l,min(r,tm)),qry(2*v+1,tm+1,tr,max(tm+1,l),r));
+ll jmp(ll x, ll d){
+    FOR(i,0,MAXL){
+        if((d>>i)&1)
+            x = up[x][i];
     }
-
-    ll qryRange(ll l, ll r){
-        return qry(1,1,n,l+1,r+1);
-    }
-};
-ll n,x;
-vl st;
-
-void update(ll idx, ll val){
-    st[idx += n] = val;
-    for(idx/=2;idx;idx /= 2)
-        st[idx] = min(st[2*idx],st[2*idx+1]);
+    return x?:-1;
 }
-ll qry(ll lo, ll hi){
-    ll ra = INT_MAX, rb = INT_MAX;
-    for(lo += n,hi += n+1;lo<hi;lo /= 2, hi /= 2){
-        if(lo&1) ra = min(ra,st[lo++]);
-        if(hi&1) rb = min(rb,st[--hi]);
+void solve(){   
+    ll n,q;
+    cin>>n>>q;
+    FOR(i,2,n+1){
+        cin>>up[i][0];
     }
-    return min(ra,rb);
-}
-void solve(){     
-    cin>>n>>x;
-    st.resize(4*n, INT_MAX);
-    vl arr(n);
-    FOR(i,0,n){
-        cin>>arr[i];
-        update(i+1,arr[i]);
-    }  
-    // Segment tree(arr);
-    FOR(_,0,x){
-        ll a,b,t;
-        cin>>t>>a>>b;
-        if(t == 1){
-            // tree.update(1,1,n,a,b);
-            update(a,b);
+
+    FOR(i,1,n+1){
+        FOR(j,1,MAXL){
+            up[i][j] = up[up[i][j-1]][j-1];
         }
-        else{
-            // cout<<tree.qryRange(a-1,b-1)<<'\n';
-            cout<<qry(a,b)<<'\n';
-        }
+    }
+     FOR(i,1,n+1){
+        FOR(j,0,MAXL) cout<<up[i][j]<<' ';
+        cout<<'\n';
+    }
+    FOR(i,0,q){
+        ll a,b;
+        cin>>a>>b;
+        cout<<jmp(a,b)<<'\n';
     }
 }
 int main()

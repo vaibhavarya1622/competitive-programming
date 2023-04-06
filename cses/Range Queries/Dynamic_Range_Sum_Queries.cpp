@@ -99,6 +99,7 @@ void solve(){
             tree.update(a-1,b);
         }
         else{
+            cout<<tree.qry(b-1)<<' '<<tree.qry(a-1)<<'\n';
             cout<<tree.qryRange(a-1,b-1)<<'\n';
         }
     }
