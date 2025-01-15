@@ -29,7 +29,7 @@ int main(){
     priority_queue<Node,vector<Node>,decltype(cmp)> min_heap(cmp);
 
     vector<ar<ll,2>> dist(n+1,{INF,INF});//dist[i][0] = not used coupon, dist[i][1] = used coupon
-    min_heap.push(Node{1,0,0});//cost,used or not,curr city
+    min_heap.push(Node{1,0,0});//curr city,used or not,cost
 
     while(!min_heap.empty()){
         auto a = min_heap.top();
