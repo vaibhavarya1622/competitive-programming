@@ -48,7 +48,7 @@ int main(){
     if(prev[end[0]][end[1]] !=-1){
         string ans;
         int ni = end[0],nj = end[1];
-        while(ni^begin[0] || nj^begin[1]){
+        while(ni^begin[0] || nj^begin[1]) {
             ans += dir[prev[ni][nj]];
             ar<int,2> tmp = {ni,nj};
             if(prev[tmp[0]][tmp[1]] <= 1)

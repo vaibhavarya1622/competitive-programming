@@ -1,3 +1,20 @@
+// In this problem, we're asked the minimum number of rooms needed to accommodate
+// $n$ customers, who arrive and leave on set days. Let's sort each customer by
+// their start time so that we do not have a customer arriving at say, time 3,
+// occupying a room before a customer that arrives at time 2.
+
+// Now, we can iterate through the customers while maintaining a minimum priority
+// queue that stores the departure times of customers we've already processed. For
+// each customer, we check to see if the minimum element in the priority queue is
+// less than the arrival time of the new customer.
+
+// If this is true, that means a room previously occupied has opened up, so we
+// remove the minimum element from the priority queue and replace it with the new
+// customer's departure time. The new customer will be allocated to the same room
+// as the customer who departed.
+// Otherwise, all the rooms are full, so we need to allocate another room for the
+// customer and add it to the priority queue.
+
 #include<bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>

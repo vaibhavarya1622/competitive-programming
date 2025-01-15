@@ -2,12 +2,12 @@
 #include<vector>
 using namespace std;
 
-int main(){
+int main() {
     int n;
     cin>>n;
     vector<string> v ={"0","1"};
 
-    for(int i=1;i<n;++i){
+    for(int i=1;i<n;++i) {
         int sz = v.size();
         for(int k=sz-1;k>=0;k--){
             v.push_back(v[k]);

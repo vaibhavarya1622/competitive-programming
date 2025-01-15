@@ -12,11 +12,13 @@ int parent(int x){
     }
     return arr[x];
 }
+
 void join(int u, int v){
     int px = parent(u);
     int py = parent(v);
     arr[px] = py;
 }
+
 int main(){
     int n,m,u,v;
     cin>>n>>m;
