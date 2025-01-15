@@ -1,3 +1,5 @@
+//Here I am using the Bellman-Ford algorithm. It gives the shortest distance from 1 to n node
+// But this algo can also detect negative cycles. On nth iteration, if the distance further reduces, it means graph have negative cycle.
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -33,7 +35,7 @@ int main(){
     }
 
     vector<bool> vis(n+1,false);
-    dfs(n,RG,vis);
+    dfs(n,RG,vis); // we did the dfs to make sure we don't go through the node, which does not go to node n
     vector<ll> D(n+1,-INF);
     D[1] = 0;
     FOR(i,0,n){
